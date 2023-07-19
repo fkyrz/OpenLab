@@ -71,7 +71,8 @@ function getConfig() {
   const num = parseInt($('#numOfNodes').val(), 10)
   const start = 0
   const pos = new Array(num)
-  const nodeSize = 30 //直径
+  const rec = new Array(num)
+  const nodeSize = 300 / num //直径
 
   const height = $('#canvas').attr('height')
   const width = $('#canvas').attr('width')
@@ -84,9 +85,11 @@ function getConfig() {
     for (let k = 0; k < 100 && !isOK; k++) {
       isOK = true
 
-      const x = Math.floor( Math.random() * width ) // 0 - height-1
-      const y = Math.floor( Math.random() * height ) // 0 - width-1
+      const rx = Math.random(), ry = Math.random()
+      const x = Math.floor( rx * width ) // 0 - height-1
+      const y = Math.floor( ry * height ) // 0 - width-1
       pos[i] = {x, y}
+      rec[i] = {rx, ry}
 
       if (pos[i].x < nodeSize || width - pos[i].x < nodeSize ||
           pos[i].y < nodeSize || height - pos[i].y < nodeSize)
@@ -99,6 +102,8 @@ function getConfig() {
       }
     }
   }
+
+  console.log(rec);
 
   return { num, start, pos, nodeSize }
 }

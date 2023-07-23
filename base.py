@@ -2,7 +2,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import unquote
 import os
 
-ADDRESS = "127.0.0.2"
+ADDRESS = "127.0.0.1"
 PORT = 8080
 
 class MyHandler(BaseHTTPRequestHandler):

@@ -12,6 +12,19 @@ let iterator = null
 let isStopped = false
 let config = null
 let historyIndex = null
+let dataIsHandmade = true; 
+
+window.onload = function() {
+  // Check if dataIsHandmade is true
+  if (dataIsHandmade) {
+    // If it is, hide the element with id="dataishandmade"
+    document.getElementById('dataisrandom').style.display = 'none';
+  } else {
+    // Otherwise, hide the element with id="dataisrandom"
+    document.getElementById('dataishandmade').style.display = 'none';
+  }
+};
+
 
 function init() {
   isStopped = true
@@ -68,7 +81,7 @@ function change(replace = false) {
 }
 
 function getConfig() {
-  const num = parseInt($('#numOfNodes').val(), 10)
+  const num = (!dataIsHandmade ? parseInt($('#numOfNodes').val(), 10) : window.uploadedData.length)
   const start = 0
   const pos = new Array(num)
   const rec = window.uploadedData || new Array(num);
@@ -77,32 +90,36 @@ function getConfig() {
   const height = $('#canvas').attr('height')
   const width = $('#canvas').attr('width')
 
-  // generate Pos
-  for (let i = 0; i < num; i++) {
-
-    let isOK = false
-
-    for (let k = 0; k < 100 && !isOK; k++) {
-      isOK = true
-
-      const rx = Math.random(), ry = Math.random()
-      const x = Math.floor( rx * width ) // 0 - height-1
-      const y = Math.floor( ry * height ) // 0 - width-1
-      pos[i] = {x, y}
-      rec[i] = {rx, ry}
-
-      if (pos[i].x < nodeSize || width - pos[i].x < nodeSize ||
-          pos[i].y < nodeSize || height - pos[i].y < nodeSize)
-        isOK = false
-
-      for (let j = 0; j < i && isOK; j++) {
-        if (getDistance(pos[j], pos[i]) < nodeSize * 2) {
+  if (dataIsHandmade) {
+    for (let i = 0; i < num; i++) {
+      const x = Math.floor( rec[i].rx * width ) // 0 - height-1
+      const y = Math.floor( rec[i].ry * height ) // 0 - width-1
+      pos[i] = { x, y };
+    }
+  } else {
+    // generate Pos
+    for (let i = 0; i < num; i++) {
+      let isOK = false
+      for (let k = 0; k < 100 && !isOK; k++) {
+        isOK = true
+        const rx = Math.random(), ry = Math.random()
+        const x = Math.floor( rx * width ) // 0 - height-1
+        const y = Math.floor( ry * height ) // 0 - width-1
+        pos[i] = {x, y}
+        rec[i] = {rx, ry}
+  
+        if (pos[i].x < nodeSize || width - pos[i].x < nodeSize ||
+            pos[i].y < nodeSize || height - pos[i].y < nodeSize)
           isOK = false
+  
+        for (let j = 0; j < i && isOK; j++) {
+          if (getDistance(pos[j], pos[i]) < nodeSize * 2) {
+            isOK = false
+          }
         }
       }
     }
   }
-
   console.log(rec);
 
   return { num, start, pos, nodeSize }

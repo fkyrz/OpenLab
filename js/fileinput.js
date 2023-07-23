@@ -12,6 +12,10 @@ document.getElementById('fileInput').addEventListener('change', function(evt) {
   reader.onload = function(e) {
     // Parse the file contents as JSON and assign it to the uploadedData variable
     window.uploadedData = JSON.parse(e.target.result);
+    
+    // Call init() after the file has been successfully loaded and parsed
+    console.log('File uploaded');
+    init();
   };
 
   // Start reading the file as text

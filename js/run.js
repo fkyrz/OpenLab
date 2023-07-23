@@ -71,7 +71,7 @@ function getConfig() {
   const num = parseInt($('#numOfNodes').val(), 10)
   const start = 0
   const pos = new Array(num)
-  const rec = new Array(num)
+  const rec = window.uploadedData || new Array(num);
   const nodeSize = 300 / num //直径
 
   const height = $('#canvas').attr('height')
